@@ -1,23 +1,19 @@
 import pyautogui
 import random
+import string
 
-special = ["#", "$", "%", "&", "*", "!", "@", "^", "-", "+", "."]
-alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-            "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-numerals = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+alphabet = string.printable[:76]
 cracked_password = []
 
 
 def set_character_limitations():
     # Let user input a password using input()
     # Find the length of the password using len()
-    # print('Enter a password, only the alphabet, numbers, and some special characters are allowed:')
 
     user_input = pyautogui.password('Enter your password: ')
     length = len(user_input)
     inputlist = set(user_input)
-    caps = [x.upper() for x in alphabet]
-    setcheck = inputlist.difference(special, alphabet, numerals, caps)
+    setcheck = inputlist.difference(alphabet)
     setlength = len(setcheck)
     # Check for character limit
     if length > 15:
@@ -28,10 +24,10 @@ def set_character_limitations():
         print("The character(s)", setcheck, "aren't allowed!")
         set_character_limitations()
     elif not setcheck:
-        password_cracker(user_input, length)
+        password_cracker(user_input)
 
 
-def password_cracker(user_input, length):
+def password_cracker(user_input):
     # Checks if each character is a letter(capitalized or not), a number or a special character.
     # If condition is correct, loop until it matcheds with the randomized list of alphanumerics and special characters.
     # Prints output live to see the function in action as it loops through to find the password
@@ -58,7 +54,7 @@ def password_cracker(user_input, length):
         if char.isnumeric() == True:
             rand = ''
             while rand != char:
-                rand = random.choice(numerals)
+                rand = random.choice(alphabet)
                 if rand == char:
                     cracked_password.append(rand)
                     i += 1
@@ -66,8 +62,7 @@ def password_cracker(user_input, length):
         elif char.isalpha() != True:
             rand = ''
             while rand != char:
-                rand = random.choice(special)
-                print("Trying random special character ...", rand)
+                rand = random.choice(alphabet)
                 if rand == char:
                     cracked_password.append(rand)
                     i += 1
